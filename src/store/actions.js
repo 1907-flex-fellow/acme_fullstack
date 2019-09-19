@@ -42,4 +42,20 @@ const destroyUser = (user)=> {
   };
 };
 
-export { fetchUsers, destroyUser };
+const toggleUser = (user)=> {
+  return async(dispatch)=> {
+    await axios.put(`/api/users/${user.id}`);
+    const users = (await axios.get('/api/users')).data;
+    return dispatch(setUsers(users))
+  }
+}
+
+const createUser = (user)=> {
+  return async(dispatch)=> {
+    await axios.post(`/api/users`, user);
+    const users = (await axios.get('/api/users')).data;
+    return dispatch(setUsers(users))
+  }
+}
+
+export { fetchUsers, destroyUser, toggleUser, createUser };
