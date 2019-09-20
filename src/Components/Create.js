@@ -23,25 +23,29 @@ class Create extends React.Component{
 
     handleSubmit(e){
         e.preventDefault()
-        console.log('this.state: ', this.state)
+        // console.log('this.state: ', this.state)
         this.props.createUser(this.state)
             .then(() => this.props.history.push('/users'))
+            .catch(ex=>{
+                console.log('errors: ', ex)
+                this.setState({errors: ex.response.data.errors})
+            })
     }
     render(){
         const { name, active, errors } = this.state
         const { onChange, handleSubmit } = this
+        console.log('errors: ', errors)
         return (
             <div>
                 {
-                    errors.length ? <div>
-                        <ul>
-                            {
-                                errors.map( (error,idx) => <li key={idx}>{error.message}</li>)
-                            }
-                        </ul>
-                    </div>: null
+                    !!errors.length && (<ul className='alert alert-danger'>
+                        {
+                            errors.map((error, idx)=><li key={idx}>{error}</li>)
+                        }
+                    </ul>)
                 }
                 <form onSubmit={handleSubmit}>
+                    <label>Name</label>
                     <input type='text' name={'name'} value={name} onChange= {onChange}/>
                     <input name='active' type='checkbox' checked={active} onChange={onChange}/>
                     <button type='submit'>Create User</button>

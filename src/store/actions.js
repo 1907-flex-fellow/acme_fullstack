@@ -44,7 +44,7 @@ const destroyUser = (user)=> {
 
 const toggleUser = (user)=> {
   return async(dispatch)=> {
-    await axios.put(`/api/users/${user.id}`);
+    await axios.put(`/api/users/${user.id}`, user);
     const users = (await axios.get('/api/users')).data;
     return dispatch(setUsers(users))
   }
